@@ -10,6 +10,7 @@
                     invisible="leave_validation_type in ['no_validation','hr','manager','both']"/>
                     <field  name="managing_directors_ids" widget="many2many_tags" placeholder="Nobody will be notified"
                     invisible="leave_validation_type in ['no_validation','hr','manager','both','higher',]"/>
+                    <field name="maximum_timeoff_day"/>
             </xpath>
         </field>
     </record>

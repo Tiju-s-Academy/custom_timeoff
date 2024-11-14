@@ -1,4 +1,4 @@
-from odoo import fields, models,_
+from odoo import fields, models,_,api
 from odoo.exceptions import UserError
 
 class HrLeave(models.Model):
@@ -20,6 +20,7 @@ class HrLeave(models.Model):
     def onchange(self,values,field_names,fields_spec):
         """  this for leave type set"""
         print("hello")
+
         return super().onchange(values, field_names, fields_spec)
 
     def action_approve(self, check_state=True):

@@ -16,3 +16,6 @@ class HrLeaveType(models.Model):
     managing_directors_ids = fields.Many2many('res.users', 'director_users', string='Managing Directors',
                                               help="Choose the Managing Directors who will be notified to approve"
                                                    " allocation or Time Off Request. If empty, nobody will be notified")
+    maximum_timeoff_day = fields.Integer(string="Maximum Timeoff Day",
+                                         help="Maximum timeoff Day taken by this Timeoff Type")
+
