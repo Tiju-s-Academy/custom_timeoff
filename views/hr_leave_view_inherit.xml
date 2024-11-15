@@ -22,4 +22,15 @@
             </xpath>
         </field>
     </record>
+    <record id="custom_hr_leave_view_form_inherit" model="ir.ui.view">
+            <field name="name">custom.hr.leave.form.inherit</field>
+            <field name="model">hr.leave</field>
+            <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Locate the Confirm button by its name and change the visibility condition -->
+                <xpath expr="//button[@name='action_confirm']" position="attributes">
+                    <attribute name="invisible">state in ['confirm','validate1', 'validate']</attribute>
+                </xpath>
+            </field>
+        </record>
 </odoo>
