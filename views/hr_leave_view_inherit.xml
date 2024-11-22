@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!--Time filter based on maximum days in the timeoff type -->
     <record id="hr_leave_form_inherit_domain" model="ir.ui.view">
         <field name="name">hr.leave.form.inherit.domain</field>
         <field name="model">hr.leave</field>
@@ -12,6 +13,7 @@
             </xpath>
         </field>
     </record>
+    <!--confirm button visibility -->
     <record id="custom_hr_leave_view_form_inherit" model="ir.ui.view">
         <field name="name">custom.hr.leave.form.inherit</field>
         <field name="model">hr.leave</field>
@@ -23,13 +25,14 @@
             </xpath>
         </field>
     </record>
+    <!-- can approve and can refuse in tree view -->
     <record id="view_holiday_allocation_tree_inherit" model="ir.ui.view">
         <field name="name">time.off.requests.tree.inherit</field>
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
         <field name="arch" type="xml">
             <field name="state" position="after">
-                <field name="can_approve" invisible="1"/>
+                <field name="can_approve" invisible="1" options="{'no_create': True}"/>
             </field>
             <!-- Add or modify fields/buttons here -->
             <button name="action_approve" position="attributes">
@@ -38,6 +41,9 @@
             <button name="action_refuse" position="attributes">
                 <attribute name="invisible">not can_approve</attribute>
             </button>
+            <xpath expr="//button[@name='action_refuse']" position="after">
+            <field name="approved_by_ids" widget="many2many_avatar_user"/>
+            </xpath>
         </field>
     </record>
     <record id="view_holiday_allocation_form_inherit" model="ir.ui.view">
