@@ -173,4 +173,10 @@ class HrLeave(models.Model):
         else:
             self.sudo().action_validate()
 
+    @api.onchange('request_date_from','request_date_to','number_of_days_display')
+    def _onchange_bt(self):
+
+        self.holiday_status_id = ''
+
+
 
