@@ -176,7 +176,8 @@ class HrLeave(models.Model):
     @api.onchange('request_date_from','request_date_to','number_of_days_display')
     def _onchange_bt(self):
 
-        self.holiday_status_id = ''
+        if not self.request_unit_half:
+            self.holiday_status_id = ''
 
 
 
