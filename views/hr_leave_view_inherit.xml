@@ -31,10 +31,7 @@
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
         <field name="arch" type="xml">
-            <field name="state" position="after">
-                <field name="can_approve" invisible="1" options="{'no_create': True}"/>
-            </field>
-            <!-- Add or modify fields/buttons here -->
+            <field name="can_approve" invisible="1" options="{'no_create': True}"/>
             <button name="action_approve" position="attributes">
                 <attribute name="invisible">not can_approve</attribute>
             </button>
@@ -42,24 +39,24 @@
                 <attribute name="invisible">not can_approve</attribute>
             </button>
             <xpath expr="//button[@name='action_refuse']" position="after">
-            <field name="approved_by_ids" widget="many2many_avatar_user"/>
+                <field name="approved_by_ids" widget="many2many_avatar_user"/>
             </xpath>
         </field>
     </record>
     <record id="view_holiday_allocation_form_inherit" model="ir.ui.view">
-    <field name="name">time.off.requests.form.inherit</field>
-    <field name="model">hr.leave</field>
-    <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
-    <field name="arch" type="xml">
-        <!-- Add the invisible logic to approve and reject buttons -->
-        <xpath expr="//button[@name='action_approve']" position="attributes">
-            <attribute name="invisible">not can_approve</attribute>
-        </xpath>
-        <xpath expr="//button[@name='action_refuse']" position="attributes">
-            <attribute name="invisible">not can_approve</attribute>
-        </xpath>
-    </field>
-</record>
+        <field name="name">time.off.requests.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add the invisible logic to approve and reject buttons -->
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="invisible">not can_approve</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="invisible">not can_approve</attribute>
+            </xpath>
+        </field>
+    </record>
     <record id="view_hr_holidays_filter_inherit" model="ir.ui.view">
         <field name="name">hr.holidays.filter.inherit</field>
         <field name="model">hr.leave</field>
@@ -69,13 +66,14 @@
                 <attribute name="domain">[
                     ('state', 'in', ['confirm', 'validate1', 'partial_approved']),
                     '|',
-                        ('employee_id.user_id', '!=', uid),
-                        '|',
-                            '&amp;',
-                                ('state', '=', 'confirm'),
-                                ('holiday_status_id.leave_validation_type', '=', 'hr'),
-                            ('state', '=', 'validate1')
-                ]</attribute>
+                    ('employee_id.user_id', '!=', uid),
+                    '|',
+                    '&amp;',
+                    ('state', '=', 'confirm'),
+                    ('holiday_status_id.leave_validation_type', '=', 'hr'),
+                    ('state', '=', 'validate1')
+                    ]
+                </attribute>
             </xpath>
         </field>
     </record>

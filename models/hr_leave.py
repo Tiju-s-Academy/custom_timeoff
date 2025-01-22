@@ -1,5 +1,7 @@
 from odoo import fields, models,_,api
 from odoo.exceptions import UserError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class HrLeave(models.Model):
@@ -20,7 +22,6 @@ class HrLeave(models.Model):
         current_user = self.env.user
 
         for record in self:
-            record.ensure_one()
             record.can_approve = False
             if record.state == 'confirm' and current_user == record.employee_id.leave_manager_id and not record.first_approver_id:
                 record.can_approve = True
@@ -28,13 +29,14 @@ class HrLeave(models.Model):
                 if record.first_approver_id and not record.second_approver_id:
                     if current_user.id in record.holiday_status_id.responsible_ids.ids:
                         record.can_approve = True
-                if record.first_approver_id and record.second_approver_id and not record.third_approval_id:
+                elif record.first_approver_id and record.second_approver_id and not record.third_approval_id:
                     if current_user == record.holiday_status_id.higher_authority_id:
                         record.can_approve = True
-                if (record.first_approver_id and record.second_approver_id and record.third_approval_id
-                        and not record.fourth_approval_id):
+                elif record.first_approver_id and record.second_approver_id and record.third_approval_id and not record.fourth_approval_id:
                     if current_user.id in record.holiday_status_id.managing_directors_ids.ids:
                         record.can_approve = True
+            # Debug logs
+            _logger.info(f"Computed can_approve for {record.id}: {record.can_approve}")
 
     def leave_approved_message(self):
         """Reusable function to show the 'Leave Approved' rainbow message effect."""
@@ -58,13 +60,13 @@ class HrLeave(models.Model):
     def activity_update(self):
         holiday_status_id = self.holiday_status_id
         employee = self.env['hr.employee'].search([('user_id', '=', self.env.user.id)], limit=1)
-        parent_user_id = employee.parent_id.user_id.id if employee.parent_id else None
+        leave_manager_id = employee.leave_manager_id.id if employee.leave_manager_id else None
         holidays = self.filtered(lambda leave: leave.validation_type == 'no_validation')
         if not holidays:
-            if parent_user_id:
+            if leave_manager_id:
                 self.activity_schedule(
                     'custom_timeoff.mail_activity_timeoff',
-                    user_id=parent_user_id,
+                    user_id=leave_manager_id,
                 )
             if holiday_status_id.responsible_ids:
                 for res in holiday_status_id.responsible_ids:
