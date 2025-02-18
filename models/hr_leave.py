@@ -93,11 +93,12 @@ class HrLeave(models.Model):
         lt = self.holiday_status_id  # leave type
         if lt.leave_validation_type == 'both':
             if not self.first_approver_id:
-                print(current_user)
-                print(self.employee_id.leave_manager_id)
                 self.filtered(lambda hol: hol.validation_type == 'both').write(
                     {'state': 'partial_approved', 'first_approver_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
 
             if self.first_approver_id and not self.second_approver_id:
@@ -106,7 +107,7 @@ class HrLeave(models.Model):
                 self.approved_by_ids = [(4, current_user.id)]
                 activity_ids = self.activity_ids
                 if activity_ids:
-                    activity_ids.unlink()
+                    activity_ids.action_done()
                 return {
                     'effect': {
                         'fadeout': 'slow',
@@ -121,16 +122,25 @@ class HrLeave(models.Model):
                 self.filtered(lambda hol: hol.validation_type == 'md').write(
                          {'state': 'partial_approved', 'first_approver_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
             if self.first_approver_id and not self.second_approver_id:
                 self.filtered(lambda hol: hol.validation_type == 'md').write(
                     {'state': 'partial_approved', 'second_approver_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
             if self.first_approver_id and self.second_approver_id and not self.third_approval_id:
                 self.filtered(lambda hol: hol.validation_type == 'md').write(
                     {'state': 'partial_approved', 'third_approval_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
             if self.first_approver_id and self.second_approver_id and self.third_approval_id and not self.fourth_approval_id:
                 self.filtered(lambda hol: hol.validation_type == 'md').write(
@@ -138,7 +148,7 @@ class HrLeave(models.Model):
                 self.approved_by_ids = [(4, current_user.id)]
                 activity_ids = self.activity_ids
                 if activity_ids:
-                    activity_ids.unlink()
+                    activity_ids.action_done()
                 return {
                     'effect': {
                         'fadeout': 'slow',
@@ -152,11 +162,17 @@ class HrLeave(models.Model):
                 self.filtered(lambda hol: hol.validation_type == 'higher').write(
                          {'state': 'partial_approved', 'first_approver_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
             if self.first_approver_id and not self.second_approver_id:
                 self.filtered(lambda hol: hol.validation_type == 'higher').write(
                     {'state': 'partial_approved', 'second_approver_id': current_employee.id})
                 self.approved_by_ids = [(4, current_user.id)]
+                activity_ids = self.activity_ids
+                if activity_ids:
+                    activity_ids.action_done()
                 return self.leave_approved_message()
             if self.first_approver_id and self.second_approver_id and not self.third_approval_id:
                 self.filtered(lambda hol: hol.validation_type == 'higher').write(
@@ -164,7 +180,7 @@ class HrLeave(models.Model):
                 self.approved_by_ids = [(4, current_user.id)]
                 activity_ids = self.activity_ids
                 if activity_ids:
-                    activity_ids.unlink()
+                    activity_ids.action_done()
                 return {
                     'effect': {
                         'fadeout': 'slow',
