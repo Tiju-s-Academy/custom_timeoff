@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='holiday_status_id']" position="attributes">
                 <attribute name="domain">
-                    [('maximum_timeoff_day', '>=', number_of_days_display)]
+                    [('maximum_timeoff_day', '>=', number_of_days_display),('virtual_remaining_leaves', '>', 0)]
                 </attribute>
             </xpath>
         </field>
