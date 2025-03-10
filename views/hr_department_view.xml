@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_department_view_inherited" model="ir.ui.view">
+        <field name="name">hr.department.form.inherited</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='color']" position="after">
+                <field name="timeoff_bypass"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
